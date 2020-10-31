@@ -5,21 +5,36 @@ output:
     keep_md: true
 ---
 
-
 ## Loading and preprocessing the data
+Reading the unzipped data using read.csv
+```{r }
+activity <- read.csv("activity.csv")
 
-
+#activity$date <- as.POSIXct(activity$date, "%Y-%m-%d")
+#weekday <- weekdays(activity$date)
+#activity <- cbind(activity,weekday)
+totalStepsPerDay <- tapply(activity$steps,activity$date,sum,na.rm=TRUE)
+hist(totalStepsPerDay,main="Total Steps Per Day Histogram",xlab="steps",col = "red",breaks = seq(0,25000, by=2500),ylim=c(0,20))
+```
 
 ## What is mean total number of steps taken per day?
 
+```{r }
+median(totalStepsPerDay)
+mean(totalStepsPerDay)
+#tapply(activity$steps,activity$date,mean,na.rm=TRUE)
+#tapply(activity$steps,activity$date,median,na.rm=TRUE)
 
+```
 
 ## What is the average daily activity pattern?
-
-
+averageStepsPerDay <- tapply(activity$steps,activity$date,mean,na.rm=TRUE)
+averageStepsPerDay <- averageStepsPerDay[!is.na(averageStepsPerDay)]
+plot(as.Date(names(averageStepsPerDay)),averageStepsPerDay,xlab="Date",ylab="Average Steps Per Day",type="l")
+which.max(averageStepsPerDay)
 
 ## Imputing missing values
-
+To inputing missing values, first I identify the NA
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
